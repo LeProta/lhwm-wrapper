@@ -94,4 +94,3 @@ The static library is compiled with `/MD` — consuming plugins must build Relea
 
 - [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) — MPL-2.0.
 - [OpenRGBDevelopers/lhwm-wrapper](https://gitlab.com/OpenRGBDevelopers/lhwm-wrapper) — upstream project (OpenRGB Hardware Sync plugin dependency).
-- NvAPIWrapper.Net — MIT.
