@@ -1,0 +1,61 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\NZXTPumpPlugin\\tools\\lhwm-wrapper-src\\lhwm-wrapper\\lhwm-wrapper.csproj": {}
+  },
+  "projects": {
+    "C:\\NZXTPumpPlugin\\tools\\lhwm-wrapper-src\\lhwm-wrapper\\lhwm-wrapper.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\NZXTPumpPlugin\\tools\\lhwm-wrapper-src\\lhwm-wrapper\\lhwm-wrapper.csproj",
+        "projectName": "LhwmBindingsLib",
+        "projectPath": "C:\\NZXTPumpPlugin\\tools\\lhwm-wrapper-src\\lhwm-wrapper\\lhwm-wrapper.csproj",
+        "packagesPath": "C:\\Users\\LeProtagoniste\\.nuget\\packages\\",
+        "outputPath": "C:\\NZXTPumpPlugin\\tools\\lhwm-wrapper-src\\lhwm-wrapper\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\LeProtagoniste\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "targetAlias": "net472",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "targetAlias": "net472",
+          "dependencies": {
+            "LibreHardwareMonitorLib": {
+              "target": "Package",
+              "version": "[0.9.4, )",
+              "generatePathProperty": true
+            },
+            "NvAPIWrapper.Net": {
+              "target": "Package",
+              "version": "[0.8.1.101, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.421\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\bin\x64\Release\net472\LhwmBindingsLib.dll
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\bin\x64\Release\net472\LhwmBindingsLib.pdb
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\bin\x64\Release\net472\HidSharp.dll
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\bin\x64\Release\net472\NvAPIWrapper.dll
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\bin\x64\Release\net472\System.CodeDom.dll
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\lhwm-wrapper.csproj.AssemblyReference.cache
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\lhwm-wrapper.GeneratedMSBuildEditorConfig.editorconfig
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\lhwm-wrapper.AssemblyInfoInputs.cache
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\lhwm-wrapper.AssemblyInfo.cs
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\lhwm-wrapper.csproj.CoreCompileInputs.cache
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\lhwm-wrapper.sourcelink.json
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\lhwm-wra.E705ABD2.Up2Date
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\LhwmBindingsLib.dll
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\obj\x64\Release\net472\LhwmBindingsLib.pdb
+C:\NZXTPumpPlugin\tools\lhwm-wrapper-src\lhwm-wrapper\bin\x64\Release\net472\LibreHardwareMonitorLib.dll
