@@ -4,7 +4,8 @@ _LibreHardwareMonitor bridge DLL for native (C++) consumers — used by the NZXT
 
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11%20(x64)-0078D6)
 ![.NET](https://img.shields.io/badge/.NET%20Framework-4.7.2-512BD4)
-![LHM](https://img.shields.io/badge/LibreHardwareMonitor-0.9.4-blue)
+![LHM](https://img.shields.io/badge/LibreHardwareMonitor-0.9.6-blue)
+![Driver](https://img.shields.io/badge/kernel%20driver-PawnIO-2ea44f)
 
 Fork of [OpenRGBDevelopers/lhwm-wrapper](https://gitlab.com/OpenRGBDevelopers/lhwm-wrapper) exposing [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) sensors and fan controls to native C++ code, through two artifacts:
 
@@ -22,7 +23,7 @@ Used by:
 
 ## Changes vs upstream
 
-- **LibreHardwareMonitorLib pinned to 0.9.4** (stable). The 0.9.6 pre-releases fail to initialize the kernel sensor driver (no motherboard chip, CPU temperatures stuck at 0).
+- **LibreHardwareMonitorLib pinned to 0.9.6** (stable). 0.9.5 dropped the WinRing0 / inpoutx64 kernel drivers in favour of [PawnIO](https://pawnio.eu) — Microsoft-signed and accepted by anti-cheats. On 0.9.4 the WinRing0 driver is refused by Windows 11 24H2+ (blocklisted), LHM falls back to `inpoutx64.sys` (certificate expired in 2009) and installs it as an **auto-start** service, which blocks games such as THE FINALS from launching.
 - **`SetControlDefault(identifier)`** — releases a fan control back to its default (BIOS/automatic) mode via `Control.SetDefault()`. Required by the Pump plugin to hand fans back on exit.
 - **`GetReport()`** — full LibreHardwareMonitor diagnostic report, useful for debugging sensor enumeration.
 
@@ -49,6 +50,8 @@ Identifiers are LibreHardwareMonitor paths (`/lpc/nct6799d/0/control/0`, `/amdcp
 
 Download **`lhwm-wrapper.dll`** from the [Releases](https://github.com/LeProta/lhwm-wrapper/releases) page and place it **next to `OpenRGB.exe`**. Both NZXT Kraken plugins share this single file.
 
+Install **[PawnIO](https://pawnio.eu)** (2.1.0 or later) — it provides the kernel driver LHM reads the hardware through. Without it, only GPU and RAM sensors show up.
+
 Run OpenRGB **as Administrator** for motherboard/CPU sensors — the kernel driver needs it.
 
 ---
@@ -68,13 +71,31 @@ Two parts, built separately.
 ### 1. Managed assembly (`lhwm-wrapper.dll`)
 
 ```bat
-dotnet build lhwm-wrapper -c Release -p:Platform=x64
+dotnet build lhwm-wrapper\lhwm-wrapper.csproj -c Release
 ```
+
+`RuntimeIdentifier=win-x64` is set in the csproj so that NuGet drops the RID-specific
+`LibreHardwareMonitorLib.dll` next to the output — without it the build succeeds but the
+LHM assembly never lands in `bin\`. Output goes to `bin\Release
+et472\win-x64\`.
 
 Then merge the output into a single assembly (primary first, output name must be `lhwm-wrapper.dll`):
 
 ```bat
-ILRepack.exe /out:lhwm-wrapper.dll LhwmBindingsLib.dll LibreHardwareMonitorLib.dll <remaining bin\*.dll>
+cd lhwm-wrapperin\Release
+et472\win-x64
+ILRepack.exe /target:library /targetplatform:v4 /out:lhwm-wrapper.dll ^
+  LhwmBindingsLib.dll LibreHardwareMonitorLib.dll <remaining *.dll>
+```
+
+The merged assembly must keep the identity `lhwm-wrapper, Version=1.0.0.0, Culture=neutral,
+PublicKeyToken=null` — that is what `lhwm-cpp-wrapper.lib` binds to, so plugins built against
+an older build keep working without a rebuild.
+
+Sanity check on the result — it must contain no embedded kernel driver:
+
+```bat
+findstr /m "inpoutx64 WinRing0.gz" lhwm-wrapper.dll
 ```
 
 ### 2. Native bridge (`lhwm-cpp-wrapper.lib`)
@@ -93,4 +114,5 @@ The static library is compiled with `/MD` — consuming plugins must build Relea
 ## Acknowledgements & licenses
 
 - [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) — MPL-2.0.
+- [PawnIO](https://pawnio.eu) — kernel driver used by LHM 0.9.5+.
 - [OpenRGBDevelopers/lhwm-wrapper](https://gitlab.com/OpenRGBDevelopers/lhwm-wrapper) — upstream project (OpenRGB Hardware Sync plugin dependency).
