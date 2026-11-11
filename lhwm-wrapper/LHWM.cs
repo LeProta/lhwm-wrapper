@@ -6,15 +6,26 @@ namespace LHWMWrapperNameSpace
 {
     public class LHWMWrapper
     {
+        // Several plugins call in from their own threads: one lock serialises init, updates and controls.
+        private static readonly object sync = new object();
         private static LHWMWrapper instance;
         private readonly Dictionary<string, ISensor> sensors_map = new Dictionary<string, ISensor>();
         private readonly Dictionary<string, List<Tuple<string, string, string>>> hardware_sensor_map
             = new Dictionary<string, List<Tuple<string, string, string>>>();
         private Computer computer_instance;
 
+        // Hardware.Update() refreshes every sensor of that hardware: do it at most once per window,
+        // not once per value read (a plugin reading 14 fan values would otherwise update 14 times).
+        private const long UpdateWindowMs = 250;
+        private readonly Dictionary<IHardware, long> last_update_ms = new Dictionary<IHardware, long>();
+        private readonly System.Diagnostics.Stopwatch clock = System.Diagnostics.Stopwatch.StartNew();
+
         public static LHWMWrapper GetInstance()
         {
-            return instance ?? (instance = new LHWMWrapper());
+            lock (sync)
+            {
+                return instance ?? (instance = new LHWMWrapper());
+            }
         }
 
         private LHWMWrapper()
@@ -29,33 +40,49 @@ namespace LHWMWrapperNameSpace
 
         public float GetSensorValue(string identifier)
         {
-            if (sensors_map.TryGetValue(identifier, out ISensor sensor))
+            lock (sync)
             {
-                sensor.Hardware.Update();
+                if (!sensors_map.TryGetValue(identifier, out ISensor sensor))
+                    return 0;
+
+                long now = clock.ElapsedMilliseconds;
+                if (!last_update_ms.TryGetValue(sensor.Hardware, out long last) || now - last >= UpdateWindowMs)
+                {
+                    sensor.Hardware.Update();
+                    last_update_ms[sensor.Hardware] = now;
+                }
                 return sensor.Value ?? 0;
             }
-            return 0;
         }
 
         public void SetControlValue(string identifier, float value)
         {
-            if (sensors_map.TryGetValue(identifier, out ISensor sensor) && sensor.Control != null)
+            lock (sync)
             {
-                sensor.Control.SetSoftware(value);
+                if (sensors_map.TryGetValue(identifier, out ISensor sensor) && sensor.Control != null)
+                {
+                    sensor.Control.SetSoftware(value);
+                }
             }
         }
 
         public void SetControlDefault(string identifier)
         {
-            if (sensors_map.TryGetValue(identifier, out ISensor sensor) && sensor.Control != null)
+            lock (sync)
             {
-                sensor.Control.SetDefault();
+                if (sensors_map.TryGetValue(identifier, out ISensor sensor) && sensor.Control != null)
+                {
+                    sensor.Control.SetDefault();
+                }
             }
         }
 
         public string GetReport()
         {
-            return computer_instance != null ? computer_instance.GetReport() : "";
+            lock (sync)
+            {
+                return computer_instance != null ? computer_instance.GetReport() : "";
+            }
         }
 
         private void init()

@@ -25,6 +25,7 @@ Used by:
 
 - **LibreHardwareMonitorLib pinned to 0.9.6** (stable). 0.9.5 dropped the WinRing0 / inpoutx64 kernel drivers in favour of [PawnIO](https://pawnio.eu) — Microsoft-signed and accepted by anti-cheats. On 0.9.4 the WinRing0 driver is refused by Windows 11 24H2+ (blocklisted), LHM falls back to `inpoutx64.sys` (certificate expired in 2009) and installs it as an **auto-start** service, which blocks games such as THE FINALS from launching.
 - **`SetControlDefault(identifier)`** — releases a fan control back to its default (BIOS/automatic) mode via `Control.SetDefault()`. Required by the Pump plugin to hand fans back on exit.
+- **Thread-safe, rate-limited updates** — one lock around init/reads/controls (both plugins call in from their own threads), and `GetSensorValue` refreshes a hardware at most once per 250 ms instead of on every read.
 - **`GetReport()`** — full LibreHardwareMonitor diagnostic report, useful for debugging sensor enumeration.
 
 ## API (`lhwm-cpp-wrapper.h`)
