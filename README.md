@@ -19,6 +19,8 @@ Used by:
 - [NZXT Kraken LCD plugin](https://github.com/LeProta/NZXTKrakenLCDPlugin) — system sensors for the LCD infographics.
 - [NZXT Kraken Pump plugin](https://github.com/LeProta/NZXTKrakenPumpPlugin) — motherboard fan control + temperature sources.
 
+Both plugins (1.1.0 for OpenRGB 1.1, and the older 1.0.x for OpenRGB 1.0rc3) work with v1.1.0 or later. v1.2.0 is recommended: it is thread-safe and cuts the hardware refreshes from about 25 to 4 per second when both plugins run.
+
 ---
 
 ## Changes vs upstream
@@ -77,14 +79,12 @@ dotnet build lhwm-wrapper\lhwm-wrapper.csproj -c Release
 
 `RuntimeIdentifier=win-x64` is set in the csproj so that NuGet drops the RID-specific
 `LibreHardwareMonitorLib.dll` next to the output — without it the build succeeds but the
-LHM assembly never lands in `bin\`. Output goes to `bin\Release
-et472\win-x64\`.
+LHM assembly never lands in `bin\`. Output goes to `bin\Release\net472\win-x64\`.
 
 Then merge the output into a single assembly (primary first, output name must be `lhwm-wrapper.dll`):
 
 ```bat
-cd lhwm-wrapperin\Release
-et472\win-x64
+cd lhwm-wrapper\bin\Release\net472\win-x64
 ILRepack.exe /target:library /targetplatform:v4 /out:lhwm-wrapper.dll ^
   LhwmBindingsLib.dll LibreHardwareMonitorLib.dll <remaining *.dll>
 ```
